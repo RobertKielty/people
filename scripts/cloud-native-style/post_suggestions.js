@@ -33,11 +33,19 @@ function addedLineNumbers(patch) {
 }
 
 function buildCommentBody(fix) {
+  // fx.new already ends with the line's original trailing newline (see fix_style.py),
+  // so don't add another one here or the suggestion block gets a blank line.
+  //
+  // Deliberately doesn't restate the exact casing applied (lowercase vs.
+  // Title Case vs. sentence-start) — that varies by context and the
+  // suggestion diff below already shows precisely what changes.
   return (
     `${MARKER}\n` +
-    `CNCF [style guide](${STYLE_GUIDE_URL}): use "cloud native" (lowercase, two words, unhyphenated) per this rule.\n\n` +
+    `👋 Thanks for the contribution! Courtesy of the CNCF [style guide](${STYLE_GUIDE_URL}), ` +
+    '"cloud native" is written as two words, capitalized based on context (never hyphenated). ' +
+    'Feel free to accept the suggestion below, or tweak the wording if something else reads better.\n\n' +
     '```suggestion\n' +
-    `${fix.new}\n` +
+    `${fix.new.replace(/\n$/, '')}\n` +
     '```'
   );
 }
