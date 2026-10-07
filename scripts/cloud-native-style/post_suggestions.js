@@ -33,11 +33,13 @@ function addedLineNumbers(patch) {
 }
 
 function buildCommentBody(fix) {
+  // fx.new already ends with the line's original trailing newline (see fix_style.py),
+  // so don't add another one here or the suggestion block gets a blank line.
   return (
     `${MARKER}\n` +
     `CNCF [style guide](${STYLE_GUIDE_URL}): use "cloud native" (lowercase, two words, unhyphenated) per this rule.\n\n` +
     '```suggestion\n' +
-    `${fix.new}\n` +
+    `${fix.new.replace(/\n$/, '')}\n` +
     '```'
   );
 }

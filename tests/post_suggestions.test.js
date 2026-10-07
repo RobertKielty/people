@@ -26,6 +26,12 @@ test('buildCommentBody embeds the style guide link, marker and suggestion block'
   assert.match(body, /```suggestion/);
 });
 
+test('buildCommentBody does not leave a blank line in the suggestion block', () => {
+  // fx.new carries a trailing newline from fix_style.py; buildCommentBody must not double it up.
+  const body = buildCommentBody({ line: 5, new: '    "bio": "Cloud native engineer",\n' });
+  assert.ok(!body.includes('",\n\n```'), `expected no blank line before the closing fence, got:\n${body}`);
+});
+
 test('run posts only fixes on added lines and skips untouched ones', async () => {
   const calls = { deleted: [], created: null, failed: null };
   const github = {
