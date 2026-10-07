@@ -32,5 +32,25 @@
             }
         ],
         "lfid": "testfixtureperson"
+    },
+    {
+        "name": "Second Fixture Person",
+        "bio": "<p>I love cloud-native technologies, e.g. cloud-native platforms, and I'm active in the cloud-native-community-korea group. See https://example.com/cloud-native for my talk, and my badge logo is cloud-native.png. My team is CLOUD-NATIVE certified. I also spoke at Cloud Native Days Seoul.</p><h3>cloud native at scale</h3>",
+        "company": "cloud-native ventures",
+        "pronouns": "",
+        "location": "",
+        "linkedin": "",
+        "twitter": "",
+        "github": "https://github.com/octocat2",
+        "wechat": "",
+        "website": "",
+        "youtube": "",
+        "category": [
+            "Mentee"
+        ],
+        "slack_id": "",
+        "image": "second-fixture-person.jpg",
+        "mentorships": [],
+        "lfid": "secondfixtureperson"
     }
 ]
