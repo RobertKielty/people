@@ -1,0 +1,54 @@
+name: Cloud native style
+
+# pull_request_target so suggestions can be posted on fork PRs. Never execute code from the PR.
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+    paths:
+      - people.json
+      # SANDBOX-TEST-ONLY: lets this trigger on the throwaway fixture file
+      # instead of people.json, so the real data file is never touched.
+      # Remove this line before proposing the workflow for real.
+      - tests/fixtures/people.sample.json
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cloud-native-style-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+env:
+  # SANDBOX-TEST-ONLY: points the check at the fixture instead of people.json.
+  # Set back to `people.json` (or just delete this env block) before proposing
+  # the workflow for real.
+  TARGET_FILE: tests/fixtures/people.sample.json
+
+jobs:
+  suggest:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '>= 3.14'
+
+      - name: Compute cloud native style fixes
+        run: python scripts/cloud-native-style/fix_style.py "$TARGET_FILE" fixes.json
+
+      - name: Post suggestions
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const fs = require('fs');
+            const { run } = require('./scripts/cloud-native-style/post_suggestions.js');
+            const fixes = JSON.parse(fs.readFileSync('fixes.json', 'utf8'));
+            const targetFile = process.env.TARGET_FILE || 'people.json';
+            await run({ github, context, core, fixes, targetFile });
