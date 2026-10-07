@@ -26,7 +26,7 @@
                 ],
                 "start_date": "2099-01-01",
                 "end_date": "2099-03-31",
-                "project_title": "cloud-native style check test fixture",
+                "project_title": "Cloud Native style check test fixture",
                 "idea_url": "https://example.com/idea",
                 "platform_url": "https://example.com/platform"
             }
